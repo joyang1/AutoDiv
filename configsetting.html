@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link href="bootstrap.min.css" rel="stylesheet">
+<link href="bootstrap.css" rel="stylesheet">
+<script type="text/javascript" src="jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="bootstrap.min.js"></script>
+<script type="text/javascript" src="bootstrap.js"></script>
+<style type="text/css">
+div.configtitle {height:200px;width:150px;float:left;}
+div.configcontent {height:300px;width:450px;float:left;}
+h2 {padding-top:20px;font-size:18px;}
+</style>
+</head>
+
+<body>
+	<div id="config_container" style="width:600px">
+		<div class="configtitle">
+			<h2>DataBase_Setting</h2>
+		</div>
+		<div class="configcontent">
+			<div class="input-group">
+            	<span class="input-group-addon">Server</span>
+  				<input type="text" class="form-control" name ="Server" placeholder="Server_Name" aria-describedby="basic-addon1">
+			</div>
+			<div class="input-group">
+            	<span class="input-group-addon">Database</span>
+  				<input type="text" class="form-control" name ="Database" placeholder="Database_Name" aria-describedby="basic-addon1">
+			</div>
+			<div>
+				<select class="form-control" id="option" name="Authentication">
+  					<option value="0">Widows Authentication</option>
+  					<option value="1">SQL Server Authentication</option>
+				</select>
+			</div>
+			
+			<div class="input-group" id="dbuser" style="display: none">
+            	<span class="input-group-addon">User</span>
+  				<input type="text" class="form-control" name="User" placeholder="User_Name" aria-describedby="basic-addon1">
+			</div>
+			<div class="input-group" id="dbpass" style="display: none">
+            	<span class="input-group-addon">Password</span>
+  				<input type="text" class="form-control" name="Password" placeholder="User_Password" aria-describedby="basic-addon1">
+			</div>
+	    </div>
+
+		<div class="configtitle">
+			<h2>DoMain_Setting</h2>
+		</div>
+		<div class="configcontent">
+  			<label class="radio-inline">
+  				<input type="radio" name="MethodOptions" value="currentDoMain"> currentDoMain
+			</label>
+			<label class="radio-inline">
+  				<input type="radio" name="MethodOptions" value="checkTrust"> checkTrust
+			</label>
+			<label class="radio-inline">
+  				<input type="radio" name="MethodOptions" value="enableCustom" id="enableCustom"> enableCustom
+			</label>
+  			<div id="DoMainSetting0">
+			<div class="input-group">
+            	<span class="input-group-addon">DoMain</span>
+  				<input type="text" class="form-control" placeholder="DoMain_Name" aria-describedby="basic-addon1">
+			</div>
+			<div class="input-group">
+            	<span class="input-group-addon" width="20px">User</span>
+  				<input type="text" class="form-control" name="User" placeholder="DoMain_User" aria-describedby="basic-addon1">
+			</div>
+			<div class="input-group">
+            	<span class="input-group-addon">PassWord</span>
+  				<input type="text" class="form-control" name="Password" placeholder="DoMain_Password" aria-describedby="basic-addon1">
+			</div>
+			</div>
+			<input class="btn btn-info" type="button" id="add" value="Add DoMain"> <input class="btn btn-info" type="button" id="del" value="Del DoMain">
+		</div>
+	</div>
+</body>
+</html>
+<script type="text/javascript">
+	$(document).ready(function(){
+		var num=0;
+		$('#DoMainSetting0').hide();
+		$('#add').hide();
+		$('#del').hide();
+
+  		$('.dropdown-toggle').dropdown();
+
+    	$('#option').change(function(){
+    		if($('#option').val()=="1"){
+    			$('#dbuser').show();
+        		$('#dbpass').show();
+    		}else{
+    			$('#dbuser').hide();
+    			$('#dbpass').hide();
+    		}
+    	});
+
+    	$('#add').click(function(){
+    		num++;
+    		var DoMainSettingId = "DoMainSetting"+num;
+    		var content = "<div id="+DoMainSettingId+"><br/><div class=\"input-group\"><span class=\"input-group-addon\">DoMain</span><input type=\"text\" class=\"form-control\" placeholder=\"DoMain_Name\" aria-describedby=\"basic-addon1\"></div><div class=\"input-group\"><span class=\"input-group-addon\">User</span><input type=\"text\" class=\"form-control\" name=\"User\" placeholder=\"DoMain_User\" aria-describedby=\"basic-addon1\"></div><div class=\"input-group\"><span class=\"input-group-addon\">PassWord</span><input type=\"text\" class=\"form-control\" name=\"Password\" placeholder=\"DoMain_Password\" aria-describedby=\"basic-addon1\"></div></div>";
+    		$('#DoMainSetting0').after(content);
+    		var currentId = "#"+DoMainSettingId;
+
+    		if($("input[name='MethodOptions']:checked").val() == "enableCustom"){  				
+    			$(currentId).show();
+    		}else{
+    			$(currentId).hide();
+    		}
+    		if(num>0){
+    			$('#del').show();
+    		}
+    	});
+
+    	$('#del').click(function(){
+    		var currentId = "#DoMainSetting"+num;
+    		$(currentId).remove();
+    		if(num>0){
+    			num--;
+    		}
+    		if(num==0){
+    			$('#del').hide();
+    		}   		
+    	});
+
+    	$("input[name='MethodOptions']").change(function(){
+    		for (var i = 0; i <= num; i++) {
+    			var currentId = "#DoMainSetting"+i;
+    			if($("input[name='MethodOptions']:checked").val() == "enableCustom"){  				
+    				$(currentId).show();
+    				if(i==num){
+    					$('#add').show();
+						$('#del').show();
+    				}
+    				
+    			}else{
+    				$(currentId).hide();
+    				if(i==0){
+    					$('#add').hide();
+						$('#del').hide();
+    				}
+    			}
+    		}
+    		if(num==0){
+    			$('#del').hide();
+    		}
+    	});
+    });  
+
+
+</script>
